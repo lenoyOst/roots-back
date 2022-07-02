@@ -2,10 +2,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Building } from './Building';
+import { ClassFunctionality } from './ClassFunctionality';
 import { ClassType } from './ClassType';
 import { Unit } from './Unit';
 import { User } from './User';
@@ -36,18 +39,11 @@ export class Class {
 
   @Column({ type: 'timestamp without time zone', nullable: true })
   sign_time?: Date;
+
   //class functionality
-  @Column({ nullable: true })
-  pc: number;
-
-  @Column({ nullable: true })
-  board: number;
-
-  @Column({ nullable: true })
-  projector: number;
-
-  @Column({ nullable: true })
-  ac: number;
+  @ManyToMany(() => ClassFunctionality)
+  @JoinTable({ name: 'class_functionality_class' })
+  functionality: ClassFunctionality[];
 
   public constructor(data?: Class) {
     if (data) {
