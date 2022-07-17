@@ -48,15 +48,18 @@ route.post('/sign', (req, res) => {
     });
 });
 
-route.get('/available/:startDate/:endDate/:classTypeId', async (req, res) => {
+route.post('/available/:startDate/:endDate/:classTypeId/', async (req, res) => {
   try {
     const startDate = new Date(req.params.startDate);
     const endDate = new Date(req.params.endDate);
     const classTypeId = parseInt(req.params.classTypeId);
+    const classFunctionalities = req.body.classFunctionalities;
+    console.log(req.body.classFunctionalities)
     const classes = await ClassBL.getAvailableClasses(
       startDate,
       endDate,
       classTypeId,
+      classFunctionalities,
       req.currentUser.team.parent.parent.id
     );
     res.json(classes).end();
@@ -65,5 +68,4 @@ route.get('/available/:startDate/:endDate/:classTypeId', async (req, res) => {
     res.status(500).end();
   }
 });
-
 export default route;

@@ -137,6 +137,7 @@ INSERT INTO public.class_functionality(id, name) Values (2, 'לוח');
 INSERT INTO public.class_functionality(id, name) Values (3, 'מזגן');
 
 --class_functionality_class
+INSERT INTO public.class_functionality(class_id, class_functionality_id) Values (0, 1);
 
 -- Roles
 INSERT INTO public.role (id, name) VALUES (1, 'מנהל מערכת');
