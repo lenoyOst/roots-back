@@ -9,15 +9,16 @@ export class ClassBL {
     startDate: Date,
     endDate: Date,
     classTypeId: number,
+    classFunctionalities: Array<string>,
     userGdudId: number
   ) {
     const classRepository = getRepository(Class);
     const qb = classRepository.createQueryBuilder('class');
-
     return await qb
       .select()
       .leftJoinAndSelect('class.owner', 'owner')
       .leftJoinAndSelect('class.type', 'type')
+      .leftJoinAndSelect('class.functionality', 'functionality')
       .where((qb) => {
         const subQuery = qb
           .subQuery()
@@ -45,8 +46,10 @@ export class ClassBL {
         return `NOT (class.id IN ${subQuery})`;
       })
       .andWhere('type.id = :typeId', { typeId: classTypeId })
+      .andWhere('functionality.id IN (:...functionalitiesIds)', { functionalitiesIds: classFunctionalities })
       .setParameter('gdudId', userGdudId)
       .setParameter('classTypeId', classTypeId)
+      .setParameter('classFunctionalities', classFunctionalities)
       .setParameter(
         'startDate',
         Utilities.dateToTimestampWithoutTimezone(startDate)
